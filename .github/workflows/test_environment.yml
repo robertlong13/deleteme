@@ -1,7 +1,7 @@
 name: test environment setup
 on:
   schedule:
-    - cron: '0 0 * * 6'  # every saturday at midnight
+    - cron: '45 * * * *'  # every hour at XX:45
   workflow_dispatch:
   push:
     paths:
