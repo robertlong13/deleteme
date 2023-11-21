@@ -28,6 +28,8 @@ if [ -z "$CI_BUILD_TARGET" ]; then
     CI_BUILD_TARGET="sitl linux fmuv3 omnibusf4pro-one"
 fi
 
+git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
+
 waf=modules/waf/waf-light
 
 echo "Targets: $CI_BUILD_TARGET"
