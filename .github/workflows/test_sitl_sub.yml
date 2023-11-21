@@ -161,9 +161,6 @@ concurrency:
   group: ci-${{github.workflow}}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  REPO_NAME: ${{ github.event.repository.name }}
-
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -176,6 +173,9 @@ jobs:
             clang,
         ]
     steps:
+      - name: Set repository name variable
+        run: |
+          echo "REPO_NAME=$(basename ${{ github.repository }})" >> $GITHUB_ENV
       # git checkout the PR
       - uses: actions/checkout@v3
         with:
