@@ -18,6 +18,9 @@ concurrency:
   group: ci-${{github.workflow}}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -101,7 +104,7 @@ jobs:
             *"archlinux"*)
             cp /etc/skel/.bashrc /root
             cp /etc/skel/.bashrc /github/home
-            git config --global --add safe.directory /__w/ardupilot/ardupilot
+            git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
             Tools/environment_install/install-prereqs-arch.sh -qy
             ;;
           esac
@@ -116,7 +119,7 @@ jobs:
           git config --global --add safe.directory ${GITHUB_WORKSPACE}
           source ~/.bashrc
           source $HOME/venv-ardupilot/bin/activate || true
-          git config --global --add safe.directory /__w/ardupilot/ardupilot
+          git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
           ./waf configure
           ./waf rover
 
@@ -133,9 +136,9 @@ jobs:
           case ${{matrix.os}} in
             *"archlinux"*)
               export PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH
-              export PATH=/__w/ardupilot/ardupilot/ardupilot/Tools/autotest:$PATH
+              export PATH=/__w/$REPO_NAME/$REPO_NAME/$REPO_NAME/Tools/autotest:$PATH
               ;;
           esac
-          git config --global --add safe.directory /__w/ardupilot/ardupilot
+          git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
           ./waf configure --board CubeOrange
           ./waf plane

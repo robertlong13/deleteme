@@ -139,6 +139,9 @@ concurrency:
   group: ci-${{github.workflow}}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+
 jobs:
   build:
     runs-on: 'windows-latest'
@@ -167,11 +170,11 @@ jobs:
           PATH: /usr/bin:$(cygpath ${SYSTEMROOT})/system32
         shell: C:\cygwin\bin\bash.exe -eo pipefail '{0}'
         run: >-
-          mkdir -p /cygdrive/d/a/ardupilot/ardupilot/ccache &&
+          mkdir -p /cygdrive/d/a/$REPO_NAME/$REPO_NAME/ccache &&
           mkdir -p /usr/local/etc &&
           echo "export CCACHE_SLOPPINESS=file_stat_matches" >> ~/ccache.conf &&
-          echo "export CCACHE_DIR=/cygdrive/d/a/ardupilot/ardupilot/ccache" >> ~/ccache.conf &&
-          echo "export CCACHE_BASEDIR=/cygdrive/d/a/ardupilot/ardupilot" >> ~/ccache.conf &&
+          echo "export CCACHE_DIR=/cygdrive/d/a/$REPO_NAME/$REPO_NAME/ccache" >> ~/ccache.conf &&
+          echo "export CCACHE_BASEDIR=/cygdrive/d/a/$REPO_NAME/$REPO_NAME" >> ~/ccache.conf &&
           echo "export CCACHE_COMPRESS=1" >> ~/ccache.conf &&
           echo "export CCACHE_COMPRESSLEVEL=6" >> ~/ccache.conf &&
           echo "export CCACHE_MAXSIZE=400M" >> ~/ccache.conf &&
@@ -180,7 +183,7 @@ jobs:
       - name: ccache cache files
         uses: actions/cache@v3
         with:
-          path: D:/a/ardupilot/ardupilot/ccache
+          path: D:/a/$REPO_NAME/$REPO_NAME/ccache
           key: ${{ steps.ccache_cache_timestamp.outputs.cache-key }}-ccache-${{steps.ccache_cache_timestamp.outputs.timestamp}}
           restore-keys: ${{ steps.ccache_cache_timestamp.outputs.cache-key }}-ccache-  # restore ccache from either previous build on this branch or on base branch
       - name: Prepare Python environment

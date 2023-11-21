@@ -143,6 +143,9 @@ concurrency:
   group: ci-${{github.workflow}}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -215,12 +218,12 @@ jobs:
         with:
            name: esp32-binaries -${{matrix.config}}
            path: |
-              /home/runner/work/ardupilot/ardupilot/ArduPlane.bin
-              /home/runner/work/ardupilot/ardupilot/ArduPlane.elf
-              /home/runner/work/ardupilot/ardupilot/ArduCopter.bin
-              /home/runner/work/ardupilot/ardupilot/ArduCopter.elf
-              /home/runner/work/ardupilot/ardupilot/build/esp32buzz/esp-idf_build/bootloader/bootloader.bin
-              /home/runner/work/ardupilot/ardupilot/build/esp32buzz/esp-idf_build/partition_table/partition-table.bin
+              /home/runner/work/$REPO_NAME/$REPO_NAME/ArduPlane.bin
+              /home/runner/work/$REPO_NAME/$REPO_NAME/ArduPlane.elf
+              /home/runner/work/$REPO_NAME/$REPO_NAME/ArduCopter.bin
+              /home/runner/work/$REPO_NAME/$REPO_NAME/ArduCopter.elf
+              /home/runner/work/$REPO_NAME/$REPO_NAME/build/esp32buzz/esp-idf_build/bootloader/bootloader.bin
+              /home/runner/work/$REPO_NAME/$REPO_NAME/build/esp32buzz/esp-idf_build/partition_table/partition-table.bin
 
 
            retention-days: 14
